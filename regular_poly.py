@@ -59,7 +59,7 @@ class RegularPoly:
     @property
     def apothem(self):
         """Get apothem value"""
-        return(((self.vert_count - 2)*180)/math.pi)
+        return(self.radius * math.cos(math.pi / self.vert_count))
 
     @property
     def area(self):

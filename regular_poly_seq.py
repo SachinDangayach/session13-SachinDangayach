@@ -1,17 +1,17 @@
 # regular_poly_seq.py
 
+import regular_poly as rp
 from functools import lru_cache
 
 """Regular Polygon Sequence class"""
 class RegularPolySeq:
     """Class to create a sequence of regular polygon"""
 
-    radius = 10 # Static variable - Circumradius
-
-    def __init__(self, vert_count):
+    def __init__(self, vert_count, radius):
         """Initialize the RegulaPoly class attributes"""
 
         self.vert_count = vert_count # Number of vertices of polygon
+        self.radius     = radius # Circumradius
 
     @property
     def vert_count(self):
@@ -29,18 +29,33 @@ class RegularPolySeq:
         self._vert_count = vert_count
 
     @property
-    def poly_list(self):
-        """Get count of vertices"""
-        return [RegularPoly(vert, RegularPolySeq.radius) for vert in range(3,self.vert_count)]
+    def radius(self):
+        """Get circumradius"""
+        return self._radius
 
+    @radius.setter
+    def radius(self, radius):
+        """Set the circumradius of polygon"""
+        if not isinstance(radius, int):
+            raise TypeError(f'Radius should be of type integer')
+        if radius < 0:
+            raise ValueError(f'Radius should be greater than 0')
+
+        self._radius = radius
 
     def __getitem__(self, seq):
         """get next item in the sequence"""
         if isinstance(seq, int):
-            if seq < 0 or seq >self.vert_count:
+            seq = seq + 3
+            if seq - 3 < 0:
+                seq = self.vert_count + seq - 3
+            if seq  < 3 or seq > self.vert_count:
                 raise IndexError
             else:
-                return poly_list[seq]
+                if seq >=3:
+                    return RegularPolySeq._seq(seq, self.radius)
+        else:
+            raise TypeError ('Please provide valid integer value')
 
     def __len__(self):
         """get length of sequence"""
@@ -54,25 +69,22 @@ class RegularPolySeq:
         """ Return string for RegularPolySeq"""
         return (f'RegularPolySeq({self.vert_count}, {self.radius})')
 
-#     @property
-#     def max_efficiency_poly(self):
-# #         ratio = -100.0
-# #         max_ratio_polygon = None
-# #         for i in range(3, self.vert_count + 1):
-# #             print(self[i])
-# #             poly = self[i]
-# #             area_perimeter_ratio = poly.area / poly.perimeter
-# #             if area_perimeter_ratio > ratio:
-# #                 ratio = area_perimeter_ratio
-# #                 max_ratio_polygon = poly
-#         sorted(self[i], lambda x: self[i])
-#         return max_ratio_polygon
+    @property
+    def max_efficiency_poly(self):
+        """ find the max efficiency polygon """
+        max_ratio = -100
+        for i in range(self.vert_count-2):
+            area_perimeter_ratio = self.__getitem__(i)[1]
+            if area_perimeter_ratio > max_ratio:
+                max_ratio = area_perimeter_ratio
+                max_ratio_polygon = self.__getitem__(i)[0]
+        return max_ratio_polygon
 
     @staticmethod
-    @lru_cache(2**10)
-    def _poly(n):
-        if n == 3:
-            return RegularPoly(n,RegularPolySeq.radius)
+    @lru_cache(2 ** 10)
+    def _seq(seq,radius):
+        if seq < 3:
+            return None
         else:
-#             return RegularPoly(n,RegularPolySeq.radius), RegularPolySeq._poly(n-1)
-            return RegularPolySeq._poly(n-1)
+            poly = rp.RegularPoly(seq,radius)
+            return poly , poly.area/poly.perimeter
