@@ -4,10 +4,13 @@ This assignment is based on the concepts of "Sequence Types - 1 ". Sequences are
 
 Solution:-
 **Class is implemented in Module regular_poly.py**
+https://github.com/SachinDangayach/session13-SachinDangayach/blob/master/regular_poly.py
 
 **Class is implemented in Module regular_poly.py**
+https://github.com/SachinDangayach/session13-SachinDangayach/blob/master/regular_poly_seq.py
 
 **Ipynb file to test the above mentioned Modules**
+https://github.com/SachinDangayach/session13-SachinDangayach/blob/master/session13.ipynb
 
 
 1. We have implemented a Regular Polygon class which takes number or vertices and circumradius and gives a polygon class object with following properties-
@@ -16,8 +19,8 @@ Solution:-
         - number of edges/vertices
         - circumradius
     - it provide following properties:
-        - # edges
-        - # vertices
+        - number of edges
+        - number of  vertices
         - interior angle
         - edge length
         - apothem
